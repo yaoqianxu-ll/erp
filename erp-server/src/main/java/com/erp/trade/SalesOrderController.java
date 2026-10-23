@@ -8,11 +8,13 @@ import com.erp.trade.entity.SalesOrder;
 import com.erp.trade.service.SalesOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/sales-orders")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('admin')")
 public class SalesOrderController {
 
     private final SalesOrderService salesOrderService;

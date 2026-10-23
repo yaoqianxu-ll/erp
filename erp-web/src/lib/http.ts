@@ -34,6 +34,8 @@ http.interceptors.response.use(
       if (!window.location.pathname.startsWith('/login')) {
         window.location.href = '/login'
       }
+    } else if (status === 403) {
+      toast.error('没有操作权限，请联系管理员')
     } else {
       toast.error(message)
     }

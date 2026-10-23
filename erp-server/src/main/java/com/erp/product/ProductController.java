@@ -5,6 +5,7 @@ import com.erp.common.Result;
 import com.erp.product.entity.Product;
 import com.erp.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,18 +37,21 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> create(@RequestBody Product product) {
         productService.createProduct(product);
         return Result.ok();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> update(@PathVariable Long id, @RequestBody Product product) {
         productService.updateProduct(id, product);
         return Result.ok();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> delete(@PathVariable Long id) {
         productService.deleteProduct(id);
         return Result.ok();

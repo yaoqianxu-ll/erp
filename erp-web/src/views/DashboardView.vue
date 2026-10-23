@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import {
   AlertTriangle,
@@ -28,6 +28,33 @@ import TableCell from '@/components/ui/table/TableCell.vue'
 import { api } from '@/lib/http'
 import type { Inventory, StockRecord } from '@/lib/types'
 import { money, number } from '@/lib/format'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+
+const allowedPaths = computed(() => {
+  const paths: string[] = []
+  const walk = (menus: typeof auth.menus) => {
+    menus.forEach((menu) => {
+      if (menu.path) paths.push(menu.path)
+      if (menu.children?.length) walk(menu.children)
+    })
+  }
+  walk(auth.menus)
+  return paths
+})
+
+function can(path: string) {
+  return allowedPaths.value.length === 0 || allowedPaths.value.includes(path)
+}
+
+const quickLinks = [
+  { label: '商品档案', desc: '维护商品与价格', to: '/product/list', icon: Package },
+  { label: '库存查询', desc: '查看各仓实时库存', to: '/inventory/list', icon: Warehouse },
+  { label: '出入库流水', desc: '追溯库存变动', to: '/inventory/records', icon: ArrowLeftRight },
+  { label: '采购订单', desc: '采购、审核与入库', to: '/purchase/orders', icon: ShoppingCart },
+  { label: '销售订单', desc: '销售、审核与出库', to: '/sales/orders', icon: Truck },
+]
 
 interface Stats {
   productCount: number
@@ -84,6 +111,7 @@ onMounted(load)
     <PageHeader title="仪表盘" description="掌握商品、库存与业务单据的整体运行情况">
       <template #actions>
         <RouterLink
+          v-if="can('/purchase/orders')"
           to="/purchase/orders"
           class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90"
         >
@@ -179,13 +207,7 @@ onMounted(load)
         </CardHeader>
         <CardContent class="grid gap-2.5">
           <RouterLink
-            v-for="link in [
-              { label: '商品档案', desc: '维护商品与价格', to: '/product/list', icon: Package },
-              { label: '库存查询', desc: '查看各仓实时库存', to: '/inventory/list', icon: Warehouse },
-              { label: '出入库流水', desc: '追溯库存变动', to: '/inventory/records', icon: ArrowLeftRight },
-              { label: '采购订单', desc: '采购、审核与入库', to: '/purchase/orders', icon: ShoppingCart },
-              { label: '销售订单', desc: '销售、审核与出库', to: '/sales/orders', icon: Truck },
-            ]"
+            v-for="link in quickLinks.filter((link) => can(link.to))"
             :key="link.to"
             :to="link.to"
             class="group flex items-center gap-3 rounded-lg border border-slate-100 px-3.5 py-3 transition hover:border-blue-200 hover:bg-blue-50/40"

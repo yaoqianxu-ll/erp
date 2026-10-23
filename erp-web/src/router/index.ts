@@ -1,5 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import type { Menu } from '@/lib/types'
+
+function collectPaths(menus: Menu[]): string[] {
+  const paths: string[] = []
+  const walk = (nodes: Menu[]) => {
+    nodes.forEach((menu) => {
+      if (menu.path) paths.push(menu.path)
+      if (menu.children?.length) walk(menu.children)
+    })
+  }
+  walk(menus)
+  return paths
+}
 
 const router = createRouter({
   history: createWebHistory(),
@@ -102,6 +115,10 @@ router.beforeEach(async (to) => {
       auth.logout()
       return { path: '/login' }
     }
+  }
+  const allowedPaths = collectPaths(auth.menus)
+  if (to.path !== '/dashboard' && allowedPaths.length > 0 && !allowedPaths.includes(to.path)) {
+    return { path: '/dashboard' }
   }
   return true
 })

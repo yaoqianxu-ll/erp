@@ -5,6 +5,7 @@ import com.erp.common.Result;
 import com.erp.inventory.entity.Warehouse;
 import com.erp.inventory.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +30,21 @@ public class WarehouseController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> create(@RequestBody Warehouse warehouse) {
         warehouseService.createWarehouse(warehouse);
         return Result.ok();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> update(@PathVariable Long id, @RequestBody Warehouse warehouse) {
         warehouseService.updateWarehouse(id, warehouse);
         return Result.ok();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public Result<Void> delete(@PathVariable Long id) {
         warehouseService.deleteWarehouse(id);
         return Result.ok();

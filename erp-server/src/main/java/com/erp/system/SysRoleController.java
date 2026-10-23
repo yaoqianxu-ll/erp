@@ -5,6 +5,7 @@ import com.erp.common.Result;
 import com.erp.system.entity.SysRole;
 import com.erp.system.service.SysRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('admin')")
 public class SysRoleController {
 
     private final SysRoleService roleService;

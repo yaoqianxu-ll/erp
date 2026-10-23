@@ -6,11 +6,13 @@ import com.erp.security.SecurityUtils;
 import com.erp.system.entity.SysUser;
 import com.erp.system.service.SysUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('admin')")
 public class SysUserController {
 
     private final SysUserService userService;

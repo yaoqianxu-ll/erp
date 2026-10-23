@@ -4,6 +4,7 @@ import com.erp.common.Result;
 import com.erp.system.entity.SysMenu;
 import com.erp.system.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/menus")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('admin')")
 public class SysMenuController {
 
     private final SysMenuService menuService;

@@ -4,6 +4,7 @@ import com.erp.common.Result;
 import com.erp.product.entity.Category;
 import com.erp.product.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('admin')")
 public class CategoryController {
 
     private final CategoryService categoryService;

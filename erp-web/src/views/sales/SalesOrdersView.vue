@@ -246,8 +246,8 @@ onMounted(() => {
                 </div>
               </div>
             </TableCell>
-            <TableCell class="text-sm text-slate-700">{{ order.customer }}</TableCell>
-            <TableCell class="text-sm text-slate-600">{{ order.warehouseName }}</TableCell>
+            <TableCell class="whitespace-nowrap text-sm text-slate-700">{{ order.customer }}</TableCell>
+            <TableCell class="whitespace-nowrap text-sm text-slate-600">{{ order.warehouseName }}</TableCell>
             <TableCell class="text-right text-sm font-semibold text-slate-800">{{ money(order.totalAmount) }}</TableCell>
             <TableCell><OrderStatusBadge :status="order.status" /></TableCell>
             <TableCell class="text-sm text-slate-600">{{ order.createBy || '-' }}</TableCell>
